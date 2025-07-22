@@ -8,7 +8,6 @@ import (
 	v1alpha1 "github.com/gocrane/api/analysis/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
-	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
@@ -20,9 +19,9 @@ type FakeRecommendations struct {
 	ns   string
 }
 
-var recommendationsResource = schema.GroupVersionResource{Group: "analysis.crane.io", Version: "v1alpha1", Resource: "recommendations"}
+var recommendationsResource = v1alpha1.SchemeGroupVersion.WithResource("recommendations")
 
-var recommendationsKind = schema.GroupVersionKind{Group: "analysis.crane.io", Version: "v1alpha1", Kind: "Recommendation"}
+var recommendationsKind = v1alpha1.SchemeGroupVersion.WithKind("Recommendation")
 
 // Get takes name of the recommendation, and returns the corresponding recommendation object, and an error if there is any.
 func (c *FakeRecommendations) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.Recommendation, err error) {
@@ -101,7 +100,7 @@ func (c *FakeRecommendations) UpdateStatus(ctx context.Context, recommendation *
 // Delete takes name of the recommendation and deletes it. Returns an error if one occurs.
 func (c *FakeRecommendations) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteAction(recommendationsResource, c.ns, name), &v1alpha1.Recommendation{})
+		Invokes(testing.NewDeleteActionWithOptions(recommendationsResource, c.ns, name, opts), &v1alpha1.Recommendation{})
 
 	return err
 }

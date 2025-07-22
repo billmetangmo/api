@@ -8,7 +8,6 @@ import (
 	v1alpha1 "github.com/gocrane/api/analysis/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
-	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
@@ -20,9 +19,9 @@ type FakeConfigSets struct {
 	ns   string
 }
 
-var configsetsResource = schema.GroupVersionResource{Group: "analysis.crane.io", Version: "v1alpha1", Resource: "configsets"}
+var configsetsResource = v1alpha1.SchemeGroupVersion.WithResource("configsets")
 
-var configsetsKind = schema.GroupVersionKind{Group: "analysis.crane.io", Version: "v1alpha1", Kind: "ConfigSet"}
+var configsetsKind = v1alpha1.SchemeGroupVersion.WithKind("ConfigSet")
 
 // Get takes name of the configSet, and returns the corresponding configSet object, and an error if there is any.
 func (c *FakeConfigSets) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.ConfigSet, err error) {
@@ -89,7 +88,7 @@ func (c *FakeConfigSets) Update(ctx context.Context, configSet *v1alpha1.ConfigS
 // Delete takes name of the configSet and deletes it. Returns an error if one occurs.
 func (c *FakeConfigSets) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteAction(configsetsResource, c.ns, name), &v1alpha1.ConfigSet{})
+		Invokes(testing.NewDeleteActionWithOptions(configsetsResource, c.ns, name, opts), &v1alpha1.ConfigSet{})
 
 	return err
 }

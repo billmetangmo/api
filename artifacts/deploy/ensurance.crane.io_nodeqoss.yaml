@@ -1,11 +1,9 @@
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.18.0
   name: nodeqoss.ensurance.crane.io
 spec:
   group: ensurance.crane.io
@@ -24,14 +22,19 @@ spec:
         description: NodeQOS is the Schema for the nodeqos API
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
@@ -76,10 +79,9 @@ spec:
                         type: boolean
                     type: object
                   elasticNodeCpuLimit:
-                    description: ElasticNodeCpuLimit is the total cpu usage limit
-                      for the workloads which use extended resource in node Suppress
-                      the workloads which use extended resource when the CPU usage
-                      of the node exceedes ElasticNodeCpuLimit
+                    description: |-
+                      ElasticNodeCpuLimit is the total cpu usage limit for the workloads which use extended resource in node
+                      Suppress the workloads which use extended resource when the CPU usage of the node exceedes ElasticNodeCpuLimit
                     properties:
                       percent:
                         format: int64
@@ -128,8 +130,9 @@ spec:
                     description: HTTPGet specifies the http request to perform.
                     properties:
                       host:
-                        description: Host name to connect to, defaults to the pod
-                          IP. You probably want to set "Host" in httpHeaders instead.
+                        description: |-
+                          Host name to connect to, defaults to the pod IP. You probably want to set
+                          "Host" in httpHeaders instead.
                         type: string
                       httpHeaders:
                         description: Custom headers to set in the request. HTTP allows
@@ -139,7 +142,9 @@ spec:
                             used in HTTP probes
                           properties:
                             name:
-                              description: The header field name
+                              description: |-
+                                The header field name.
+                                This will be canonicalized upon output, so case-variant names will be understood as the same header.
                               type: string
                             value:
                               description: The header field value
@@ -149,6 +154,7 @@ spec:
                           - value
                           type: object
                         type: array
+                        x-kubernetes-list-type: atomic
                       path:
                         description: Path to access on the HTTP server.
                         type: string
@@ -156,13 +162,15 @@ spec:
                         anyOf:
                         - type: integer
                         - type: string
-                        description: Name or number of the port to access on the container.
-                          Number must be in the range 1 to 65535. Name must be an
-                          IANA_SVC_NAME.
+                        description: |-
+                          Name or number of the port to access on the container.
+                          Number must be in the range 1 to 65535.
+                          Name must be an IANA_SVC_NAME.
                         x-kubernetes-int-or-string: true
                       scheme:
-                        description: Scheme to use for connecting to the host. Defaults
-                          to HTTP.
+                        description: |-
+                          Scheme to use for connecting to the host.
+                          Defaults to HTTP.
                         type: string
                     required:
                     - port
@@ -172,14 +180,16 @@ spec:
                     properties:
                       localCacheTTLSeconds:
                         default: 60
-                        description: LocalCacheTTLSeconds is the cache expired time.
+                        description: |-
+                          LocalCacheTTLSeconds is the cache expired time.
                           Defaults to 60
                         format: int32
                         type: integer
                     type: object
                   timeoutSeconds:
-                    description: TimeoutSeconds is the timeout for request. Defaults
-                      to 0, no timeout forever.
+                    description: |-
+                      TimeoutSeconds is the timeout for request.
+                      Defaults to 0, no timeout forever.
                     format: int32
                     type: integer
                 type: object
@@ -192,8 +202,9 @@ spec:
                       type: string
                     avoidanceThreshold:
                       default: 1
-                      description: How many times the rule is reach, to trigger avoidance
-                        action. Defaults to 1. Minimum value is 1.
+                      description: |-
+                        How many times the rule is reach, to trigger avoidance action.
+                        Defaults to 1. Minimum value is 1.
                       format: int32
                       type: integer
                     metricRule:
@@ -203,16 +214,16 @@ spec:
                           description: Name is the name of the given metric
                           type: string
                         selector:
-                          description: Selector is the selector for the given metric
-                            it is the string-encoded form of a standard kubernetes
-                            label selector
+                          description: |-
+                            Selector is the selector for the given metric
+                            it is the string-encoded form of a standard kubernetes label selector
                           properties:
                             matchExpressions:
                               description: matchExpressions is a list of label selector
                                 requirements. The requirements are ANDed.
                               items:
-                                description: A label selector requirement is a selector
-                                  that contains values, a key, and an operator that
+                                description: |-
+                                  A label selector requirement is a selector that contains values, a key, and an operator that
                                   relates the key and values.
                                 properties:
                                   key:
@@ -220,35 +231,36 @@ spec:
                                       applies to.
                                     type: string
                                   operator:
-                                    description: operator represents a key's relationship
-                                      to a set of values. Valid operators are In,
-                                      NotIn, Exists and DoesNotExist.
+                                    description: |-
+                                      operator represents a key's relationship to a set of values.
+                                      Valid operators are In, NotIn, Exists and DoesNotExist.
                                     type: string
                                   values:
-                                    description: values is an array of string values.
-                                      If the operator is In or NotIn, the values array
-                                      must be non-empty. If the operator is Exists
-                                      or DoesNotExist, the values array must be empty.
-                                      This array is replaced during a strategic merge
-                                      patch.
+                                    description: |-
+                                      values is an array of string values. If the operator is In or NotIn,
+                                      the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                      the values array must be empty. This array is replaced during a strategic
+                                      merge patch.
                                     items:
                                       type: string
                                     type: array
+                                    x-kubernetes-list-type: atomic
                                 required:
                                 - key
                                 - operator
                                 type: object
                               type: array
+                              x-kubernetes-list-type: atomic
                             matchLabels:
                               additionalProperties:
                                 type: string
-                              description: matchLabels is a map of {key,value} pairs.
-                                A single {key,value} in the matchLabels map is equivalent
-                                to an element of matchExpressions, whose key field
-                                is "key", the operator is "In", and the values array
-                                contains only "value". The requirements are ANDed.
+                              description: |-
+                                matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                                map is equivalent to an element of matchExpressions, whose key field is "key", the
+                                operator is "In", and the values array contains only "value". The requirements are ANDed.
                               type: object
                           type: object
+                          x-kubernetes-map-type: atomic
                         value:
                           anyOf:
                           - type: integer
@@ -265,13 +277,15 @@ spec:
                       type: string
                     restoreThreshold:
                       default: 1
-                      description: How many times the rule can restore. Defaults to
-                        1. Minimum value is 1.
+                      description: |-
+                        How many times the rule can restore.
+                        Defaults to 1. Minimum value is 1.
                       format: int32
                       type: integer
                     strategy:
                       default: None
-                      description: Action only preview, not to do the real action.
+                      description: |-
+                        Action only preview, not to do the real action.
                         Default AvoidanceActionStrategy is None.
                       enum:
                       - None
@@ -289,43 +303,45 @@ spec:
                     description: matchExpressions is a list of label selector requirements.
                       The requirements are ANDed.
                     items:
-                      description: A label selector requirement is a selector that
-                        contains values, a key, and an operator that relates the key
-                        and values.
+                      description: |-
+                        A label selector requirement is a selector that contains values, a key, and an operator that
+                        relates the key and values.
                       properties:
                         key:
                           description: key is the label key that the selector applies
                             to.
                           type: string
                         operator:
-                          description: operator represents a key's relationship to
-                            a set of values. Valid operators are In, NotIn, Exists
-                            and DoesNotExist.
+                          description: |-
+                            operator represents a key's relationship to a set of values.
+                            Valid operators are In, NotIn, Exists and DoesNotExist.
                           type: string
                         values:
-                          description: values is an array of string values. If the
-                            operator is In or NotIn, the values array must be non-empty.
-                            If the operator is Exists or DoesNotExist, the values
-                            array must be empty. This array is replaced during a strategic
+                          description: |-
+                            values is an array of string values. If the operator is In or NotIn,
+                            the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                            the values array must be empty. This array is replaced during a strategic
                             merge patch.
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: atomic
                       required:
                       - key
                       - operator
                       type: object
                     type: array
+                    x-kubernetes-list-type: atomic
                   matchLabels:
                     additionalProperties:
                       type: string
-                    description: matchLabels is a map of {key,value} pairs. A single
-                      {key,value} in the matchLabels map is equivalent to an element
-                      of matchExpressions, whose key field is "key", the operator
-                      is "In", and the values array contains only "value". The requirements
-                      are ANDed.
+                    description: |-
+                      matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                      map is equivalent to an element of matchExpressions, whose key field is "key", the
+                      operator is "In", and the values array contains only "value". The requirements are ANDed.
                     type: object
                 type: object
+                x-kubernetes-map-type: atomic
             type: object
           status:
             description: NodeQOSStatus defines the observed status of NodeQOS
@@ -335,9 +351,3 @@ spec:
         type: object
     served: true
     storage: true
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []

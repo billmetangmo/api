@@ -8,7 +8,6 @@ import (
 	v1alpha1 "github.com/gocrane/api/prediction/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
-	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
@@ -20,9 +19,9 @@ type FakeTimeSeriesPredictions struct {
 	ns   string
 }
 
-var timeseriespredictionsResource = schema.GroupVersionResource{Group: "prediction.crane.io", Version: "v1alpha1", Resource: "timeseriespredictions"}
+var timeseriespredictionsResource = v1alpha1.SchemeGroupVersion.WithResource("timeseriespredictions")
 
-var timeseriespredictionsKind = schema.GroupVersionKind{Group: "prediction.crane.io", Version: "v1alpha1", Kind: "TimeSeriesPrediction"}
+var timeseriespredictionsKind = v1alpha1.SchemeGroupVersion.WithKind("TimeSeriesPrediction")
 
 // Get takes name of the timeSeriesPrediction, and returns the corresponding timeSeriesPrediction object, and an error if there is any.
 func (c *FakeTimeSeriesPredictions) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.TimeSeriesPrediction, err error) {
@@ -101,7 +100,7 @@ func (c *FakeTimeSeriesPredictions) UpdateStatus(ctx context.Context, timeSeries
 // Delete takes name of the timeSeriesPrediction and deletes it. Returns an error if one occurs.
 func (c *FakeTimeSeriesPredictions) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteAction(timeseriespredictionsResource, c.ns, name), &v1alpha1.TimeSeriesPrediction{})
+		Invokes(testing.NewDeleteActionWithOptions(timeseriespredictionsResource, c.ns, name, opts), &v1alpha1.TimeSeriesPrediction{})
 
 	return err
 }

@@ -8,7 +8,6 @@ import (
 	v1alpha1 "github.com/gocrane/api/ensurance/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
-	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
@@ -19,9 +18,9 @@ type FakeNodeQOSs struct {
 	Fake *FakeEnsuranceV1alpha1
 }
 
-var nodeqossResource = schema.GroupVersionResource{Group: "ensurance.crane.io", Version: "v1alpha1", Resource: "nodeqoss"}
+var nodeqossResource = v1alpha1.SchemeGroupVersion.WithResource("nodeqoss")
 
-var nodeqossKind = schema.GroupVersionKind{Group: "ensurance.crane.io", Version: "v1alpha1", Kind: "NodeQOS"}
+var nodeqossKind = v1alpha1.SchemeGroupVersion.WithKind("NodeQOS")
 
 // Get takes name of the nodeQOS, and returns the corresponding nodeQOS object, and an error if there is any.
 func (c *FakeNodeQOSs) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.NodeQOS, err error) {
@@ -94,7 +93,7 @@ func (c *FakeNodeQOSs) UpdateStatus(ctx context.Context, nodeQOS *v1alpha1.NodeQ
 // Delete takes name of the nodeQOS and deletes it. Returns an error if one occurs.
 func (c *FakeNodeQOSs) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewRootDeleteAction(nodeqossResource, name), &v1alpha1.NodeQOS{})
+		Invokes(testing.NewRootDeleteActionWithOptions(nodeqossResource, name, opts), &v1alpha1.NodeQOS{})
 	return err
 }
 

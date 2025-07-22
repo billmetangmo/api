@@ -8,7 +8,6 @@ import (
 	v1alpha1 "github.com/gocrane/api/ensurance/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
-	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
@@ -19,9 +18,9 @@ type FakeAvoidanceActions struct {
 	Fake *FakeEnsuranceV1alpha1
 }
 
-var avoidanceactionsResource = schema.GroupVersionResource{Group: "ensurance.crane.io", Version: "v1alpha1", Resource: "avoidanceactions"}
+var avoidanceactionsResource = v1alpha1.SchemeGroupVersion.WithResource("avoidanceactions")
 
-var avoidanceactionsKind = schema.GroupVersionKind{Group: "ensurance.crane.io", Version: "v1alpha1", Kind: "AvoidanceAction"}
+var avoidanceactionsKind = v1alpha1.SchemeGroupVersion.WithKind("AvoidanceAction")
 
 // Get takes name of the avoidanceAction, and returns the corresponding avoidanceAction object, and an error if there is any.
 func (c *FakeAvoidanceActions) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.AvoidanceAction, err error) {
@@ -94,7 +93,7 @@ func (c *FakeAvoidanceActions) UpdateStatus(ctx context.Context, avoidanceAction
 // Delete takes name of the avoidanceAction and deletes it. Returns an error if one occurs.
 func (c *FakeAvoidanceActions) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewRootDeleteAction(avoidanceactionsResource, name), &v1alpha1.AvoidanceAction{})
+		Invokes(testing.NewRootDeleteActionWithOptions(avoidanceactionsResource, name, opts), &v1alpha1.AvoidanceAction{})
 	return err
 }
 

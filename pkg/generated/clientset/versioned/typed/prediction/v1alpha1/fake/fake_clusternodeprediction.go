@@ -8,7 +8,6 @@ import (
 	v1alpha1 "github.com/gocrane/api/prediction/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
-	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
@@ -20,9 +19,9 @@ type FakeClusterNodePredictions struct {
 	ns   string
 }
 
-var clusternodepredictionsResource = schema.GroupVersionResource{Group: "prediction.crane.io", Version: "v1alpha1", Resource: "clusternodepredictions"}
+var clusternodepredictionsResource = v1alpha1.SchemeGroupVersion.WithResource("clusternodepredictions")
 
-var clusternodepredictionsKind = schema.GroupVersionKind{Group: "prediction.crane.io", Version: "v1alpha1", Kind: "ClusterNodePrediction"}
+var clusternodepredictionsKind = v1alpha1.SchemeGroupVersion.WithKind("ClusterNodePrediction")
 
 // Get takes name of the clusterNodePrediction, and returns the corresponding clusterNodePrediction object, and an error if there is any.
 func (c *FakeClusterNodePredictions) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.ClusterNodePrediction, err error) {
@@ -101,7 +100,7 @@ func (c *FakeClusterNodePredictions) UpdateStatus(ctx context.Context, clusterNo
 // Delete takes name of the clusterNodePrediction and deletes it. Returns an error if one occurs.
 func (c *FakeClusterNodePredictions) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteAction(clusternodepredictionsResource, c.ns, name), &v1alpha1.ClusterNodePrediction{})
+		Invokes(testing.NewDeleteActionWithOptions(clusternodepredictionsResource, c.ns, name, opts), &v1alpha1.ClusterNodePrediction{})
 
 	return err
 }
