@@ -8,7 +8,6 @@ import (
 	v1alpha1 "github.com/gocrane/api/autoscaling/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
-	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
@@ -20,9 +19,9 @@ type FakeEffectiveVerticalPodAutoscalers struct {
 	ns   string
 }
 
-var effectiveverticalpodautoscalersResource = schema.GroupVersionResource{Group: "autoscaling.crane.io", Version: "v1alpha1", Resource: "effectiveverticalpodautoscalers"}
+var effectiveverticalpodautoscalersResource = v1alpha1.SchemeGroupVersion.WithResource("effectiveverticalpodautoscalers")
 
-var effectiveverticalpodautoscalersKind = schema.GroupVersionKind{Group: "autoscaling.crane.io", Version: "v1alpha1", Kind: "EffectiveVerticalPodAutoscaler"}
+var effectiveverticalpodautoscalersKind = v1alpha1.SchemeGroupVersion.WithKind("EffectiveVerticalPodAutoscaler")
 
 // Get takes name of the effectiveVerticalPodAutoscaler, and returns the corresponding effectiveVerticalPodAutoscaler object, and an error if there is any.
 func (c *FakeEffectiveVerticalPodAutoscalers) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.EffectiveVerticalPodAutoscaler, err error) {
@@ -101,7 +100,7 @@ func (c *FakeEffectiveVerticalPodAutoscalers) UpdateStatus(ctx context.Context, 
 // Delete takes name of the effectiveVerticalPodAutoscaler and deletes it. Returns an error if one occurs.
 func (c *FakeEffectiveVerticalPodAutoscalers) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteAction(effectiveverticalpodautoscalersResource, c.ns, name), &v1alpha1.EffectiveVerticalPodAutoscaler{})
+		Invokes(testing.NewDeleteActionWithOptions(effectiveverticalpodautoscalersResource, c.ns, name, opts), &v1alpha1.EffectiveVerticalPodAutoscaler{})
 
 	return err
 }

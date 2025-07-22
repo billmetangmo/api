@@ -8,7 +8,6 @@ import (
 	v1alpha1 "github.com/gocrane/api/ensurance/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
-	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
@@ -19,9 +18,9 @@ type FakePodQOSs struct {
 	Fake *FakeEnsuranceV1alpha1
 }
 
-var podqossResource = schema.GroupVersionResource{Group: "ensurance.crane.io", Version: "v1alpha1", Resource: "podqoss"}
+var podqossResource = v1alpha1.SchemeGroupVersion.WithResource("podqoss")
 
-var podqossKind = schema.GroupVersionKind{Group: "ensurance.crane.io", Version: "v1alpha1", Kind: "PodQOS"}
+var podqossKind = v1alpha1.SchemeGroupVersion.WithKind("PodQOS")
 
 // Get takes name of the podQOS, and returns the corresponding podQOS object, and an error if there is any.
 func (c *FakePodQOSs) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.PodQOS, err error) {
@@ -94,7 +93,7 @@ func (c *FakePodQOSs) UpdateStatus(ctx context.Context, podQOS *v1alpha1.PodQOS,
 // Delete takes name of the podQOS and deletes it. Returns an error if one occurs.
 func (c *FakePodQOSs) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewRootDeleteAction(podqossResource, name), &v1alpha1.PodQOS{})
+		Invokes(testing.NewRootDeleteActionWithOptions(podqossResource, name, opts), &v1alpha1.PodQOS{})
 	return err
 }
 

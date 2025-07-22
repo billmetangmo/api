@@ -1,11 +1,9 @@
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.7.0
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.18.0
   name: podqoss.ensurance.crane.io
 spec:
   group: ensurance.crane.io
@@ -23,22 +21,28 @@ spec:
       openAPIV3Schema:
         properties:
           apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
-              of an object. Servers should convert recognized schemas to the latest
-              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
             type: string
           kind:
-            description: 'Kind is a string value representing the REST resource this
-              object represents. Servers may infer this from the endpoint the client
-              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
             type: string
           metadata:
             type: object
           spec:
             properties:
               allowedActions:
-                description: 'AllowedActions limits the set of actions that the pods
-                  is allowed to perform by NodeQOS Example: ["Throttle", "Evict"]'
+                description: |-
+                  AllowedActions limits the set of actions that the pods is allowed to perform by NodeQOS
+                  Example: ["Throttle", "Evict"]
                 items:
                   type: string
                 type: array
@@ -50,43 +54,45 @@ spec:
                     description: matchExpressions is a list of label selector requirements.
                       The requirements are ANDed.
                     items:
-                      description: A label selector requirement is a selector that
-                        contains values, a key, and an operator that relates the key
-                        and values.
+                      description: |-
+                        A label selector requirement is a selector that contains values, a key, and an operator that
+                        relates the key and values.
                       properties:
                         key:
                           description: key is the label key that the selector applies
                             to.
                           type: string
                         operator:
-                          description: operator represents a key's relationship to
-                            a set of values. Valid operators are In, NotIn, Exists
-                            and DoesNotExist.
+                          description: |-
+                            operator represents a key's relationship to a set of values.
+                            Valid operators are In, NotIn, Exists and DoesNotExist.
                           type: string
                         values:
-                          description: values is an array of string values. If the
-                            operator is In or NotIn, the values array must be non-empty.
-                            If the operator is Exists or DoesNotExist, the values
-                            array must be empty. This array is replaced during a strategic
+                          description: |-
+                            values is an array of string values. If the operator is In or NotIn,
+                            the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                            the values array must be empty. This array is replaced during a strategic
                             merge patch.
                           items:
                             type: string
                           type: array
+                          x-kubernetes-list-type: atomic
                       required:
                       - key
                       - operator
                       type: object
                     type: array
+                    x-kubernetes-list-type: atomic
                   matchLabels:
                     additionalProperties:
                       type: string
-                    description: matchLabels is a map of {key,value} pairs. A single
-                      {key,value} in the matchLabels map is equivalent to an element
-                      of matchExpressions, whose key field is "key", the operator
-                      is "In", and the values array contains only "value". The requirements
-                      are ANDed.
+                    description: |-
+                      matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                      map is equivalent to an element of matchExpressions, whose key field is "key", the
+                      operator is "In", and the values array contains only "value". The requirements are ANDed.
                     type: object
                 type: object
+                x-kubernetes-map-type: atomic
               podQualityProbe:
                 description: QualityProbe defines the way to probe a pod
                 properties:
@@ -94,8 +100,9 @@ spec:
                     description: HTTPGet specifies the http request to perform.
                     properties:
                       host:
-                        description: Host name to connect to, defaults to the pod
-                          IP. You probably want to set "Host" in httpHeaders instead.
+                        description: |-
+                          Host name to connect to, defaults to the pod IP. You probably want to set
+                          "Host" in httpHeaders instead.
                         type: string
                       httpHeaders:
                         description: Custom headers to set in the request. HTTP allows
@@ -105,7 +112,9 @@ spec:
                             used in HTTP probes
                           properties:
                             name:
-                              description: The header field name
+                              description: |-
+                                The header field name.
+                                This will be canonicalized upon output, so case-variant names will be understood as the same header.
                               type: string
                             value:
                               description: The header field value
@@ -115,6 +124,7 @@ spec:
                           - value
                           type: object
                         type: array
+                        x-kubernetes-list-type: atomic
                       path:
                         description: Path to access on the HTTP server.
                         type: string
@@ -122,20 +132,23 @@ spec:
                         anyOf:
                         - type: integer
                         - type: string
-                        description: Name or number of the port to access on the container.
-                          Number must be in the range 1 to 65535. Name must be an
-                          IANA_SVC_NAME.
+                        description: |-
+                          Name or number of the port to access on the container.
+                          Number must be in the range 1 to 65535.
+                          Name must be an IANA_SVC_NAME.
                         x-kubernetes-int-or-string: true
                       scheme:
-                        description: Scheme to use for connecting to the host. Defaults
-                          to HTTP.
+                        description: |-
+                          Scheme to use for connecting to the host.
+                          Defaults to HTTP.
                         type: string
                     required:
                     - port
                     type: object
                   timeoutSeconds:
-                    description: TimeoutSeconds is the timeout for request. Defaults
-                      to 0, no timeout forever
+                    description: |-
+                      TimeoutSeconds is the timeout for request.
+                      Defaults to 0, no timeout forever
                     format: int32
                     type: integer
                 type: object
@@ -171,9 +184,10 @@ spec:
                             type: string
                         type: object
                       cpuPriority:
-                        description: CPUPriority define the cpu priority for the pods.
-                          CPUPriority range [0,7], 0 is the highest level. When the
-                          cpu resource is shortage, the low level pods would be throttled
+                        description: |-
+                          CPUPriority define the cpu priority for the pods.
+                          CPUPriority range [0,7], 0 is the highest level.
+                          When the cpu resource is shortage, the low level pods would be throttled
                         format: int32
                         maximum: 7
                         minimum: 0
@@ -181,13 +195,12 @@ spec:
                       cpuSet:
                         properties:
                           cpuSet:
-                            description: 'none/exclusive/share Provide three polices
-                              for cpuset manager: - none: containers of this pod shares
-                              a set of cpus which not allocated to exclusive containers
-                              - exclusive:  containers of this pod monopolize the
-                              allocated CPUs , other containers not allowed to use.
-                              - share: containers of this pod runs in theallocated  CPUs
-                              , but other containers can also use.'
+                            description: |-
+                              none/exclusive/share
+                              Provide three polices for cpuset manager:
+                              - none: containers of this pod shares a set of cpus which not allocated to exclusive containers
+                              - exclusive:  containers of this pod monopolize the allocated CPUs , other containers not allowed to use.
+                              - share: containers of this pod runs in theallocated  CPUs , but other containers can also use.
                             type: string
                         type: object
                       htIsolation:
@@ -252,10 +265,10 @@ spec:
                             type: integer
                         type: object
                       memPriority:
-                        description: MemoryPriority define the memory priority for
-                          the pods. MemoryPriority range [0,7], 0 is the highest level.
-                          When the memory resource is shortage, the low level pods
-                          would be OOM Killed earlier
+                        description: |-
+                          MemoryPriority define the memory priority for the pods.
+                          MemoryPriority range [0,7], 0 is the highest level.
+                          When the memory resource is shortage, the low level pods would be OOM Killed earlier
                         format: int32
                         maximum: 7
                         minimum: 0
@@ -342,29 +355,32 @@ spec:
                     type: object
                 type: object
               scopeSelector:
-                description: A scope selector represents the AND of the selectors
-                  represented by the scoped-resource selector requirements.
+                description: |-
+                  A scope selector represents the AND of the selectors represented
+                  by the scoped-resource selector requirements.
                 properties:
                   matchExpressions:
                     description: A list of scope selector requirements by scope of
                       the resources.
                     items:
-                      description: A scoped-resource selector requirement is a selector
-                        that contains values, a scope name, and an operator that relates
-                        the scope name and values.
+                      description: |-
+                        A scoped-resource selector requirement is a selector that contains values, a scope name, and an operator
+                        that relates the scope name and values.
                       properties:
                         operator:
-                          description: Represents a scope's relationship to a set
-                            of values. Valid operators are In, NotIn.
+                          description: |-
+                            Represents a scope's relationship to a set of values.
+                            Valid operators are In, NotIn.
                           type: string
                         scopeName:
                           description: The name of the scope that the selector applies
                             to.
                           type: string
                         values:
-                          description: An array of string values. If the operator
-                            is In or NotIn, the values array must be non-empty. This
-                            array is replaced during a strategic merge patch.
+                          description: |-
+                            An array of string values. If the operator is In or NotIn,
+                            the values array must be non-empty.
+                            This array is replaced during a strategic merge patch.
                           items:
                             type: string
                           type: array
@@ -382,9 +398,3 @@ spec:
         type: object
     served: true
     storage: true
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []

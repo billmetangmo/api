@@ -8,7 +8,6 @@ import (
 	v1alpha1 "github.com/gocrane/api/co2e/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
-	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
@@ -19,9 +18,9 @@ type FakeCloudCarbonFootprints struct {
 	Fake *FakeCo2eV1alpha1
 }
 
-var cloudcarbonfootprintsResource = schema.GroupVersionResource{Group: "co2e.crane.io", Version: "v1alpha1", Resource: "cloudcarbonfootprints"}
+var cloudcarbonfootprintsResource = v1alpha1.SchemeGroupVersion.WithResource("cloudcarbonfootprints")
 
-var cloudcarbonfootprintsKind = schema.GroupVersionKind{Group: "co2e.crane.io", Version: "v1alpha1", Kind: "CloudCarbonFootprint"}
+var cloudcarbonfootprintsKind = v1alpha1.SchemeGroupVersion.WithKind("CloudCarbonFootprint")
 
 // Get takes name of the cloudCarbonFootprint, and returns the corresponding cloudCarbonFootprint object, and an error if there is any.
 func (c *FakeCloudCarbonFootprints) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.CloudCarbonFootprint, err error) {
@@ -94,7 +93,7 @@ func (c *FakeCloudCarbonFootprints) UpdateStatus(ctx context.Context, cloudCarbo
 // Delete takes name of the cloudCarbonFootprint and deletes it. Returns an error if one occurs.
 func (c *FakeCloudCarbonFootprints) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewRootDeleteAction(cloudcarbonfootprintsResource, name), &v1alpha1.CloudCarbonFootprint{})
+		Invokes(testing.NewRootDeleteActionWithOptions(cloudcarbonfootprintsResource, name, opts), &v1alpha1.CloudCarbonFootprint{})
 	return err
 }
 

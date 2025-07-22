@@ -8,7 +8,6 @@ import (
 	v1alpha1 "github.com/gocrane/api/autoscaling/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
-	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
@@ -20,9 +19,9 @@ type FakeSubstitutes struct {
 	ns   string
 }
 
-var substitutesResource = schema.GroupVersionResource{Group: "autoscaling.crane.io", Version: "v1alpha1", Resource: "substitutes"}
+var substitutesResource = v1alpha1.SchemeGroupVersion.WithResource("substitutes")
 
-var substitutesKind = schema.GroupVersionKind{Group: "autoscaling.crane.io", Version: "v1alpha1", Kind: "Substitute"}
+var substitutesKind = v1alpha1.SchemeGroupVersion.WithKind("Substitute")
 
 // Get takes name of the substitute, and returns the corresponding substitute object, and an error if there is any.
 func (c *FakeSubstitutes) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.Substitute, err error) {
@@ -101,7 +100,7 @@ func (c *FakeSubstitutes) UpdateStatus(ctx context.Context, substitute *v1alpha1
 // Delete takes name of the substitute and deletes it. Returns an error if one occurs.
 func (c *FakeSubstitutes) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteAction(substitutesResource, c.ns, name), &v1alpha1.Substitute{})
+		Invokes(testing.NewDeleteActionWithOptions(substitutesResource, c.ns, name, opts), &v1alpha1.Substitute{})
 
 	return err
 }
